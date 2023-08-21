@@ -1,0 +1,57 @@
+# Compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.env
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Logs
+*.log
+
+# PyCharm IDE settings
+.idea/
+*.iml
+*.ipr
+*.iws
+
+
+# Local development settings
+config.py
+
+# User-specific files
+*.swp
+.DS_Store
+Thumbs.db
+
+
+# Temporary files
+*.tmp
+
+# Compiled binary files
+*.exe
+*.dll
+*.so
+
+# Dependency lock files
+Pipfile.lock
+yarn.lock
+
+# User-uploaded files (may vary depending on project)
+/media/
+/static/
+/uploads/
+
+# Environment-specific files
+.env.local
+.env.development
+.env.production
+
+
+
