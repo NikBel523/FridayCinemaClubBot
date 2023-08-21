@@ -1,6 +1,8 @@
 from aiogram import types, Dispatcher
 
 from create_bot import dp, bot
+from data_base.sqlite_db import sql_add_film
+
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
@@ -10,11 +12,5 @@ async def send_welcome(message: types.Message):
     await message.reply("Hi!\nI'm soon became a FridayCinemaClubBot! Unfortunately, I'm not it now.")
 
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    await message.answer(message.text)
-
-
 def register_handlers(dp: Dispatcher):
     dp.register_message_handler(send_welcome, commands=['start', 'help'])
-    dp.register_message_handler(echo)
