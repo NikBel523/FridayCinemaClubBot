@@ -12,5 +12,13 @@ async def send_welcome(message: types.Message):
     await message.reply("Hi!\nI'm soon became a FridayCinemaClubBot! Unfortunately, I'm not it now.")
 
 
+@dp.message_handler()
+async def add_film(message: types.Message):
+    film = (message.text,)
+    await sql_add_film(film)
+    await message.answer(f"{message.text} added to db")
+
+
 def register_handlers(dp: Dispatcher):
     dp.register_message_handler(send_welcome, commands=['start', 'help'])
+    dp.register_message_handler(add_film)
