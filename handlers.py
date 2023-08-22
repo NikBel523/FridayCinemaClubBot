@@ -4,12 +4,19 @@ from create_bot import dp, bot
 from data_base.sqlite_db import sql_add_film, sql_change_status, sql_show_suggestions, sql_delete_film
 
 
+list_of_keywords = """
+a '+' sign followed by a film name to add a film to list
+a '-' sign followed by a film name to set film status to "watched"
+keywords "watched" or "active" in the message text displays a list of films that match the specified status
+"""
+
+
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
     """
     This handler will be called when user sends `/start` or `/help` command
     """
-    await message.reply("Hi!\nI'm soon became a FridayCinemaClubBot! Unfortunately, I'm not it now.")
+    await message.reply(f"Hi!\n Here the list of keywords, that you can use with me:\n {list_of_keywords}")
 
 
 @dp.message_handler(lambda message: "+" in message.text)
@@ -111,10 +118,10 @@ async def show_info(message: types.Message):
     :return: None
     """
     # Inform the user about the absence of a matching command
-    await message.answer("There is no such command.")
+    await message.answer("There is no such command or keyword.")
 
     # Provide a list of active commands
-    await message.answer("Here is a list of active commands:")
+    await message.answer(f"Here is a list of active commands:\n {list_of_keywords}")
 
 
 def register_handlers(dp: Dispatcher):
