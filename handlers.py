@@ -65,7 +65,7 @@ async def check(message: types.Message):
     await message.answer(f"Status of '{film_name}' changed to 'watched'.")
 
 
-@dp.message_handler(lambda message: "watched" or "active" in message.text)
+@dp.message_handler(lambda message: "watched" in message.text or "active" in message.text)
 async def show_films(message: types.Message):
     """
     Displays a list of films based on their status.
