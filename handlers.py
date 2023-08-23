@@ -78,7 +78,7 @@ async def show_films(message: types.Message):
     """
     if "watched" in message.text:
         await sql_show_suggestions(message, ("watched",))
-    else:
+    elif "active" in message.text:
         await sql_show_suggestions(message, ("active",))
 
 
