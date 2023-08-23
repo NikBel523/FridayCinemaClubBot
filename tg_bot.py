@@ -1,15 +1,16 @@
 from aiogram.utils import executor
 from create_bot import dp
 from data_base import sqlite_db
+from handlers import manage_hand, view_hand
 
-import handlers
 
 async def on_startup(_):
     print("Bot online")
     sqlite_db.sql_start()
 
 
-handlers.register_handlers(dp=dp)
+manage_hand.register_manage_handlers(dp=dp)
+view_hand.register_view_handlers(dp=dp)
 
 
 if __name__ == "__main__":
