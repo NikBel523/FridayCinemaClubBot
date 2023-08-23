@@ -1,3 +1,4 @@
+import random
 import sqlite3 as sq
 
 from create_bot import bot
@@ -80,3 +81,25 @@ async def sql_delete_film(film: tuple):
     """
     cur.execute("DELETE FROM films WHERE film == ?", film)
     base.commit()
+
+
+async def sql_fetch_random(message, num_films):
+    """
+    Fetches a specified number of random active films from a database and sends them as messages.
+
+    This asynchronous function queries the database for active films, randomly selects the specified
+    number of films, and sends them as messages to the user.
+
+    :param message: The message object to determine the user to send films to.
+    :type message: types.Message
+
+    :param num_films: The number of random films to fetch and send.
+    :type num_films: int
+
+    :return: None
+    """
+    list_of_active_films = list(cur.execute("SELECT film FROM films WHERE status = 'active'"))
+    print(list_of_active_films)
+    random_list = random.choices(list_of_active_films, k=num_films)
+    for film in random_list:
+        await bot.send_message(message.from_user.id, text=film[0])

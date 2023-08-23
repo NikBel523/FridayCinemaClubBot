@@ -1,7 +1,7 @@
 from aiogram import types, Dispatcher
 
 from create_bot import dp, bot
-from data_base.sqlite_db import sql_add_film, sql_change_status, sql_show_suggestions, sql_delete_film
+from data_base.sqlite_db import sql_add_film, sql_change_status, sql_show_suggestions, sql_delete_film, sql_fetch_random
 
 
 list_of_keywords = """
@@ -105,6 +105,26 @@ async def delete_films(message: types.Message):
     await message.answer(f"Film '{film_name}' deleted.")
 
 
+@dp.message_handler(lambda message: "random" in message.text)
+async def random_films(message: types.Message):
+    """
+    Handle messages containing requests for random films.
+
+    This function is a message handler designed to respond to messages that contain the word "random."
+    It fetches a specified number of random films from a database and sends the information as a response.
+
+    :param message: The incoming message containing the user's request.
+    :type message: types.Message
+
+    :return: None
+    """
+    if len(message.text) == 6:
+        num_films = 1
+    else:
+        num_films = int(message.text[7:])
+    await sql_fetch_random(message, num_films)
+
+
 @dp.message_handler()
 async def show_info(message: types.Message):
     """
@@ -129,4 +149,5 @@ def register_handlers(dp: Dispatcher):
     dp.register_message_handler(add_film)
     dp.register_message_handler(check)
     dp.register_message_handler(show_films)
+    dp.register_message_handler(random_films)
     dp.register_message_handler(show_info)
