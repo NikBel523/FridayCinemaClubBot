@@ -20,12 +20,9 @@ async def add_films(message: types.Message):
     films_list = message.text.split("\n")
     # Extract the films names from the message text and set its status to 'active'
     for i in range(1, len(films_list)):
-
+        result = await sql_add_film(films_list[i])
         # Add the film to the database
-        await sql_add_film(films_list[i])
-
-    # Notify the user about the successful addition of the film
-        await message.answer(f"Added '{films_list[i]}' to the database.")
+        await message.answer(result)
 
 
 @dp.message_handler(lambda message: "+" in message.text)
@@ -42,12 +39,9 @@ async def add_film(message: types.Message):
     """
     # Extract the film name from the message text and set its status to 'active'
     film_name = message.text[2:]
-
+    result = await sql_add_film(film_name)
     # Add the film to the database
-    await sql_add_film(film_name)
-
-    # Notify the user about the successful addition of the film
-    await message.answer(f"Added '{film_name}' to the database.")
+    await message.answer(result)
 
 
 @dp.message_handler(lambda message: "---" in message.text or "—-" in message.text)
@@ -65,13 +59,11 @@ async def check_films(message: types.Message):
     """
     # Extract all names from the message text to a list
     films_list = message.text.split("\n")
-    # Change the status of each film to 'watched' in the database
+    # Change the status of each film to 'watched' in the database and notify the user about the successful status change
     for i in range(1, len(films_list)):
-        film = (films_list[i],)
-        await sql_change_status(film)
-
-        # Notify the user about the successful status change
-        await message.answer(f"Status of '{films_list[i]}' changed to 'watched'.")
+        film = films_list[i]
+        result = await sql_change_status(film)
+        await message.answer(result)
 
 
 @dp.message_handler(lambda message: "-" in message.text)
@@ -88,11 +80,9 @@ async def check(message: types.Message):
     """
     # Extract the film name from the message text
     film_name = message.text[2:]
-    # Change the status of the film to 'watched' in the database
-    await sql_change_status(film_name)
-
-    # Notify the user about the successful status change
-    await message.answer(f"Status of '{film_name}' changed to 'watched'.")
+    result = await sql_change_status(film_name)
+    # Change the status of the film to 'watched' in the database and notify the user about the successful status change
+    await message.answer(result)
 
 
 @dp.message_handler(lambda message: "delete" in message.text)
@@ -110,11 +100,9 @@ async def delete_films(message: types.Message):
     # Extract the film name from the message text
     film_name = message.text[7:]
 
-    # Delete the film from the database
-    await sql_delete_film(film_name)
-
-    # Notify the user about the successful deletion
-    await message.answer(f"Film '{film_name}' deleted.")
+    result = await sql_delete_film(film_name)
+    # Delete the film from the database and notify the user about the successful deletion
+    await message.answer(result)
 
 
 def register_manage_handlers(dp: Dispatcher):
