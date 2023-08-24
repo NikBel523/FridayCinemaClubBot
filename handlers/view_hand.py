@@ -2,6 +2,7 @@ from aiogram import types, Dispatcher
 
 from create_bot import dp
 from data_base.sqlite_db import sql_show_suggestions, sql_fetch_random
+from keyboards.view_keyboard import kb_view
 
 
 list_of_keywords = """
@@ -16,7 +17,8 @@ async def send_welcome(message: types.Message):
     """
     This handler will be called when user sends `/start` or `/help` command
     """
-    await message.reply(f"Hi!\n Here the list of keywords, that you can use with me:\n {list_of_keywords}")
+    await message.reply(f"Hi!\n Here the list of keywords, that you can use with me:\n {list_of_keywords}",
+                        reply_markup=kb_view)
 
 
 @dp.message_handler(lambda message: "watched" in message.text or "active" in message.text)
