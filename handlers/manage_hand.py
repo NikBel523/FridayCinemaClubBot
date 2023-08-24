@@ -20,10 +20,9 @@ async def add_films(message: types.Message):
     films_list = message.text.split("\n")
     # Extract the films names from the message text and set its status to 'active'
     for i in range(1, len(films_list)):
-        film = (films_list[i], "active")
 
         # Add the film to the database
-        await sql_add_film(film)
+        await sql_add_film(films_list[i])
 
     # Notify the user about the successful addition of the film
         await message.answer(f"Added '{films_list[i]}' to the database.")
@@ -43,10 +42,9 @@ async def add_film(message: types.Message):
     """
     # Extract the film name from the message text and set its status to 'active'
     film_name = message.text[2:]
-    film = (film_name, "active")
 
     # Add the film to the database
-    await sql_add_film(film)
+    await sql_add_film(film_name)
 
     # Notify the user about the successful addition of the film
     await message.answer(f"Added '{film_name}' to the database.")
@@ -91,8 +89,7 @@ async def check(message: types.Message):
     # Extract the film name from the message text
     film_name = message.text[2:]
     # Change the status of the film to 'watched' in the database
-    film = (film_name,)
-    await sql_change_status(film)
+    await sql_change_status(film_name)
 
     # Notify the user about the successful status change
     await message.answer(f"Status of '{film_name}' changed to 'watched'.")
@@ -114,8 +111,7 @@ async def delete_films(message: types.Message):
     film_name = message.text[7:]
 
     # Delete the film from the database
-    film = (film_name,)
-    await sql_delete_film(film)
+    await sql_delete_film(film_name)
 
     # Notify the user about the successful deletion
     await message.answer(f"Film '{film_name}' deleted.")

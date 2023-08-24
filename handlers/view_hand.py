@@ -33,9 +33,9 @@ async def show_films(message: types.Message):
     :return: None
     """
     if "watched" in message.text:
-        await sql_show_suggestions(message, ("watched",))
+        await sql_show_suggestions(message, "watched")
     elif "active" in message.text:
-        await sql_show_suggestions(message, ("active",))
+        await sql_show_suggestions(message, "active")
 
 
 @dp.message_handler(lambda message: "random" in message.text)

@@ -23,32 +23,31 @@ def sql_start():
     base.commit()
 
 
-async def sql_add_film(film: tuple):
+async def sql_add_film(film: str):
     """
     Adds a film to the films table in the database.
 
     This asynchronous function inserts a new film entry into the films table
     with the provided film name and status. It then commits the changes to the database.
 
-    :param film: A tuple containing the film name and its status.
+    :param film: A string containing the film name and its status.
     :return: None
     """
-    cur.execute("INSERT INTO films VALUES (?, ?)", film)
+    cur.execute("INSERT INTO films VALUES (?, 'active')", (film,))
     base.commit()
 
 
-async def sql_change_status(film: tuple):
+async def sql_change_status(film: str):
     """
     Changes the status of a film to 'watched' in the films table.
 
     This asynchronous function updates the status of a film in the films table
     to 'watched' based on the provided film name. It then commits the changes to the database.
 
-    :param film: A tuple containing the film name.
-    :type film: tuple
+    :param film: A string containing the film name.
     :return: None
     """
-    cur.execute("UPDATE films SET status = 'watched' WHERE film = (?)", film)
+    cur.execute("UPDATE films SET status = 'watched' WHERE film = ?", (film,))
     base.commit()
 
 
@@ -62,24 +61,24 @@ async def sql_show_suggestions(message, status):
     :param message: The user's message triggering the function.
     :type message: types.Message
     :param status: The desired status of films to retrieve.
-    :type status: tuple
+    :type status: str
     :return: None
     """
-    for film in cur.execute("SELECT film FROM films WHERE status = (?)", status):
+    for film in cur.execute("SELECT film FROM films WHERE status = ?", (status,)):
         await bot.send_message(message.from_user.id, text=film[0])
 
 
-async def sql_delete_film(film: tuple):
+async def sql_delete_film(film: str):
     """
     Deletes a film from the films table in the database.
 
     This asynchronous function removes a film entry from the films table based on the provided film name.
     It then commits the changes to the database.
 
-    :param film: A tuple containing the film name.
+    :param film: A str containing the film name.
     :return: None
     """
-    cur.execute("DELETE FROM films WHERE film == ?", film)
+    cur.execute("DELETE FROM films WHERE film == ?", (film,))
     base.commit()
 
 
