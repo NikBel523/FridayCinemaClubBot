@@ -4,7 +4,7 @@ from create_bot import dp
 from data_base.sqlite_db import sql_add_film, sql_change_status, sql_delete_film
 
 
-@dp.message_handler(lambda message: "+++" in message.text)
+@dp.message_handler(lambda message: message.text.startswith("+++"))
 async def add_films(message: types.Message):
     """
     Adds several films to the database with the default status set to 'active'.
@@ -25,7 +25,7 @@ async def add_films(message: types.Message):
         await message.answer(result)
 
 
-@dp.message_handler(lambda message: "+" in message.text)
+@dp.message_handler(lambda message: message.text.startswith("+"))
 async def add_film(message: types.Message):
     """
     Adds a film to the database with the default status set to 'active'.
@@ -44,7 +44,7 @@ async def add_film(message: types.Message):
     await message.answer(result)
 
 
-@dp.message_handler(lambda message: "---" in message.text or "—-" in message.text)
+@dp.message_handler(lambda message: message.text.startswith("---") or message.text.startswith("—-"))
 async def check_films(message: types.Message):
     """
     Changes the status of several films to "watched".
@@ -66,7 +66,7 @@ async def check_films(message: types.Message):
         await message.answer(result)
 
 
-@dp.message_handler(lambda message: "-" in message.text)
+@dp.message_handler(lambda message: message.text.startswith("-"))
 async def check(message: types.Message):
     """
     Changes the status of a film to "watched".
@@ -85,7 +85,7 @@ async def check(message: types.Message):
     await message.answer(result)
 
 
-@dp.message_handler(lambda message: "delete" in message.text)
+@dp.message_handler(lambda message: message.text.startswith("delete"))
 async def delete_films(message: types.Message):
     """
     Deletes a film from the database.

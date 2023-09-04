@@ -28,6 +28,9 @@ config.py
 # Local Data base
 friday_films.db
 
+# Local files
+drafts/
+
 # User-specific files
 *.swp
 .DS_Store

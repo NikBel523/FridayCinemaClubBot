@@ -21,7 +21,7 @@ async def send_welcome(message: types.Message):
                         reply_markup=kb_view)
 
 
-@dp.message_handler(lambda message: "watched" in message.text or "active" in message.text)
+@dp.message_handler(lambda message: message.text.startswith("watched") or message.text.startswith("active"))
 async def show_films(message: types.Message):
     """
     Displays a list of films based on their status.
@@ -38,7 +38,7 @@ async def show_films(message: types.Message):
         await sql_show_suggestions(message, "active")
 
 
-@dp.message_handler(lambda message: "random" in message.text)
+@dp.message_handler(lambda message: message.text.startswith("random"))
 async def random_films(message: types.Message):
     """
     Handle messages containing requests for random films.
