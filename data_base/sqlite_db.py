@@ -63,6 +63,7 @@ async def sql_add_film(film: str, comment: str) -> str:
 async def sql_change_status(film: str) -> str:
     """
     Changes the status of a film to 'watched' in the films table, if the film exists there.
+    In addition, sets the date out from NONE to current date
 
     This function updates the status of a film in the films table
     to 'watched' based on the provided film name. It then commits the changes to the database.
@@ -74,7 +75,7 @@ async def sql_change_status(film: str) -> str:
     # Check if the film exists in a database
     film_existence = sql_check_film(film)
     if film_existence == (film,):
-        cur.execute("UPDATE films SET status = 'watched' WHERE film = ?", (film,))
+        cur.execute(f"UPDATE films SET status = 'watched', date_out = '{datetime.date.today()}' WHERE film = ?", (film,))
         base.commit()
         return f"Status of '{film}' changed to 'watched'."
     else:
@@ -95,6 +96,7 @@ async def sql_show_suggestions(message, status):
     :return: None
     """
     for film in cur.execute("SELECT film FROM films WHERE status = ?", (status,)):
+        print(film)
         await bot.send_message(message.from_user.id, text=film[0])
 
 

@@ -22,8 +22,8 @@ async def add_films(message: types.Message):
     for i in range(1, len(films_list)):
         if "(" in films_list[i]:
             film_comment = films_list[i].split("(")
-            film_title = film_comment[0]
-            comment = film_comment[1]
+            film_title = film_comment[0].strip()
+            comment = film_comment[1].strip(")")
         else:
             film_title = films_list[i]
             comment = None
@@ -48,8 +48,8 @@ async def add_film(message: types.Message):
     text = message.text[2:]
     if "(" in text:
         film_comment = text.split("(")
-        film_title = film_comment[0]
-        comment = film_comment[1]
+        film_title = film_comment[0].strip()
+        comment = film_comment[1].strip(")")
     else:
         film_title = text
         comment = None
