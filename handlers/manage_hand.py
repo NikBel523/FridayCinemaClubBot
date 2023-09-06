@@ -4,7 +4,13 @@ from create_bot import dp
 from data_base.sqlite_db import sql_add_film, sql_change_status, sql_delete_film
 
 
-def content_extractor(message: str):
+def content_extractor(message: str) -> tuple:
+    """
+    Function which gets a line from a user message and extracts the film title and comment in to different variables.
+
+    :param message: message from a user
+    :return: tuple with film title and comment to a film
+    """
     if "(" in message:
         film_comment = message.split("(")
         film_title = film_comment[0].strip()
@@ -29,7 +35,7 @@ async def add_films(message: types.Message):
     """
     # Extract the list films names from the message text
     films_list = message.text.split("\n")
-    # Extract the films names from the message text and set its status to 'active'
+    # Extract the films names and comments from the message text and set its status to 'active'
     for i in range(1, len(films_list)):
         film_title, comment = content_extractor(films_list[i])
         result = await sql_add_film(film_title, comment)
@@ -49,7 +55,7 @@ async def add_film(message: types.Message):
     :param message: The message from the user, which includes the '+' sign and the film name.
     :return: None
     """
-    # Extract the film name from the message text and set its status to 'active'
+    # Extract the film name and comment from the message text and set its status to 'active'
     text = message.text[2:]
     film_title, comment = content_extractor(text)
     result = await sql_add_film(film_title, comment)
