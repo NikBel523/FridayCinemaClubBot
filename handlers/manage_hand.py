@@ -4,6 +4,17 @@ from create_bot import dp
 from data_base.sqlite_db import sql_add_film, sql_change_status, sql_delete_film
 
 
+def content_extractor(message: str):
+    if "(" in message:
+        film_comment = message.split("(")
+        film_title = film_comment[0].strip()
+        comment = film_comment[1].strip(")")
+    else:
+        film_title = message
+        comment = None
+    return film_title, comment
+
+
 @dp.message_handler(lambda message: message.text.startswith("+++"))
 async def add_films(message: types.Message):
     """
@@ -20,13 +31,7 @@ async def add_films(message: types.Message):
     films_list = message.text.split("\n")
     # Extract the films names from the message text and set its status to 'active'
     for i in range(1, len(films_list)):
-        if "(" in films_list[i]:
-            film_comment = films_list[i].split("(")
-            film_title = film_comment[0].strip()
-            comment = film_comment[1].strip(")")
-        else:
-            film_title = films_list[i]
-            comment = None
+        film_title, comment = content_extractor(films_list[i])
         result = await sql_add_film(film_title, comment)
         # Add the film to the database
         await message.answer(result)
@@ -46,13 +51,7 @@ async def add_film(message: types.Message):
     """
     # Extract the film name from the message text and set its status to 'active'
     text = message.text[2:]
-    if "(" in text:
-        film_comment = text.split("(")
-        film_title = film_comment[0].strip()
-        comment = film_comment[1].strip(")")
-    else:
-        film_title = text
-        comment = None
+    film_title, comment = content_extractor(text)
     result = await sql_add_film(film_title, comment)
     # Add the film to the database
     await message.answer(result)
