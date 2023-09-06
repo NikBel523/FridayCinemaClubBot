@@ -20,7 +20,14 @@ async def add_films(message: types.Message):
     films_list = message.text.split("\n")
     # Extract the films names from the message text and set its status to 'active'
     for i in range(1, len(films_list)):
-        result = await sql_add_film(films_list[i])
+        if "(" in films_list[i]:
+            film_comment = films_list[i].split("(")
+            film_title = film_comment[0]
+            comment = film_comment[1]
+        else:
+            film_title = films_list[i]
+            comment = None
+        result = await sql_add_film(film_title, comment)
         # Add the film to the database
         await message.answer(result)
 
@@ -38,8 +45,15 @@ async def add_film(message: types.Message):
     :return: None
     """
     # Extract the film name from the message text and set its status to 'active'
-    film_name = message.text[2:]
-    result = await sql_add_film(film_name)
+    text = message.text[2:]
+    if "(" in text:
+        film_comment = text.split("(")
+        film_title = film_comment[0]
+        comment = film_comment[1]
+    else:
+        film_title = text
+        comment = None
+    result = await sql_add_film(film_title, comment)
     # Add the film to the database
     await message.answer(result)
 

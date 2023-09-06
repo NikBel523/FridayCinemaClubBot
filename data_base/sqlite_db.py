@@ -1,5 +1,6 @@
 import random
 import sqlite3 as sq
+import datetime
 
 from create_bot import bot
 
@@ -19,7 +20,7 @@ def sql_start():
     cur = base.cursor()
     if base:
         print("Database connection established.")
-    base.execute("CREATE TABLE IF NOT EXISTS films(film TEXT, status TEXT)")
+    base.execute("CREATE TABLE IF NOT EXISTS films(film TEXT, status TEXT, date_in DATE, date_out DATE, comments TEXT)")
     base.commit()
 
 
@@ -36,13 +37,14 @@ def sql_check_film(film: str) -> tuple:
     return film_existence
 
 
-async def sql_add_film(film: str) -> str:
+async def sql_add_film(film: str, comment: str) -> str:
     """
     Adds a film to the films table in the database if this is not already exists there.
 
     This asynchronous function inserts a new film entry into the films table
     with the provided film name and status. It then commits the changes to the database.
 
+    :param comment: A string containing the user comments to the film
     :param film: A string containing the film name and its status.
     :return: A message indicating the result of the operation.
     """
@@ -53,7 +55,7 @@ async def sql_add_film(film: str) -> str:
     if film_existence == (film,):
         return f"'{film}' already exist in the database."
     else:
-        cur.execute("INSERT INTO films VALUES (?, 'active')", (film,))
+        cur.execute("INSERT INTO films VALUES (?, 'active', ?, ?, ?)", (film, datetime.date.today(), None, comment))
         base.commit()
         return f"Added '{film}' to the database."
 
