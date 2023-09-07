@@ -108,7 +108,6 @@ async def sql_show_suggestions(message, status):
     :return: None
     """
     for film in cur.execute("SELECT film, comments FROM films WHERE status = ?", (status,)):
-        print(film[0], film[1])
         await bot.send_message(message.from_user.id, text=show_title_comment(film))
 
 
@@ -124,7 +123,6 @@ async def sql_delete_film(film: str) -> str:
     """
     print("delete")
     film_existence = sql_check_film(film)
-    print(film_existence)
     if film_existence == (film,):
         cur.execute("DELETE FROM films WHERE film == ?", (film,))
         base.commit()
@@ -149,7 +147,6 @@ async def sql_fetch_random(message, num_films):
     :return: None
     """
     list_of_active_films = list(cur.execute("SELECT film, comments FROM films WHERE status = 'active'"))
-    print(list_of_active_films)
     random_list = random.choices(list_of_active_films, k=num_films)
     for film in random_list:
         await bot.send_message(message.from_user.id, text=show_title_comment(film))
