@@ -23,7 +23,6 @@ bower_components/
 
 
 # Local development settings
-config.py
 
 # Local Data base
 friday_films.db

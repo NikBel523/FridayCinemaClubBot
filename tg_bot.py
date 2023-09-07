@@ -7,6 +7,8 @@ from handlers import manage_hand, view_hand
 
 import config
 
+URL_APP = os.environ.get("URL_CINEMA_APP")
+
 
 async def on_startup(_):
     print("Bot online")
@@ -16,7 +18,7 @@ async def on_startup(_):
 async def on_startup_webhook(_):
     print("Bot online")
     sqlite_db.sql_start()
-    await bot.set_webhook(config.URL_APP)
+    await bot.set_webhook(URL_APP)
 
 
 async def on_shutdown(dp):
