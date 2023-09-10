@@ -56,7 +56,7 @@ async def add_film(message: types.Message):
     :return: None
     """
     # Extract the film name and comment from the message text and set its status to 'active'
-    text = message.text[2:]
+    text = message.text[1:]
     film_title, comment = content_extractor(text)
     result = await sql_add_film(film_title, comment)
     # Add the film to the database
@@ -98,7 +98,7 @@ async def check(message: types.Message):
     :return: None
     """
     # Extract the film name from the message text
-    film_name = message.text[2:]
+    film_name = message.text[1:].strip()
     result = await sql_change_status(film_name)
     # Change the status of the film to 'watched' in the database and notify the user about the successful status change
     await message.answer(result)
