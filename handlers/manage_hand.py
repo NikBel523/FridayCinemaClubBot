@@ -16,7 +16,7 @@ def content_extractor(message: str) -> tuple:
         film_title = film_comment[0].strip()
         comment = film_comment[1].strip(")")
     else:
-        film_title = message
+        film_title = message.strip()
         comment = None
     return film_title, comment
 
