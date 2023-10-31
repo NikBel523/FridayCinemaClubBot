@@ -4,6 +4,19 @@ from create_bot import dp
 from data_base.sqlite_db import sql_add_film, sql_change_status, sql_delete_film
 
 
+def letter_capitalizer(film: str) -> str:
+    """
+    A function that solves the problem of entering a name with a lowercase letter.
+    It gets a film input, and change it first letter to uppercase, without changing other letters.
+
+    :param film:
+    :return:
+    """
+    capital_letter = film[0].upper()
+    proper_title = capital_letter + film[1:]
+    return proper_title
+
+
 def content_extractor(message: str) -> tuple:
     """
     Function which gets a line from a user message and extracts the film title and comment in to different variables.
@@ -13,10 +26,10 @@ def content_extractor(message: str) -> tuple:
     """
     if "(" in message:
         film_comment = message.split("(")
-        film_title = film_comment[0].strip()
+        film_title = letter_capitalizer(film_comment[0].strip())
         comment = film_comment[1].strip(")")
     else:
-        film_title = message.strip()
+        film_title = letter_capitalizer(message.strip())
         comment = None
     return film_title, comment
 
@@ -80,7 +93,7 @@ async def check_films(message: types.Message):
     films_list = message.text.split("\n")
     # Change the status of each film to 'watched' in the database and notify the user about the successful status change
     for i in range(1, len(films_list)):
-        film = films_list[i]
+        film = letter_capitalizer(films_list[i])
         result = await sql_change_status(film)
         await message.answer(result)
 
@@ -98,7 +111,7 @@ async def check(message: types.Message):
     :return: None
     """
     # Extract the film name from the message text
-    film_name = message.text[1:].strip()
+    film_name = letter_capitalizer(message.text[1:].strip())
     result = await sql_change_status(film_name)
     # Change the status of the film to 'watched' in the database and notify the user about the successful status change
     await message.answer(result)
