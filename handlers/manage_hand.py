@@ -130,7 +130,7 @@ async def delete_films(message: types.Message):
     :return: None
     """
     # Extract the film name from the message text
-    film_name = message.text[7:]
+    film_name = letter_capitalizer(message.text[7:])
 
     result = await sql_delete_film(film_name)
     # Delete the film from the database and notify the user about the successful deletion
