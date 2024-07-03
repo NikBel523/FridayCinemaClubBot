@@ -1,7 +1,12 @@
-# In order to start through webhook, you need to comment out polling START_UP and vice versa
+import os
+
 START_UP = "polling"
-# START_UP = "webhook"
+
+# webhook configurations
+WEB_SERVER_HOST = "127.0.0.1"
+WEB_SERVER_PORT = 8000
+WEBHOOK_PATH = "/webhook"
+BASE_WEBHOOK_URL = "https://cinemabot.strangled.net"
 
 
-
-
+TG_TOKEN_API = os.environ.get("TG_TOKEN_API")
