@@ -7,12 +7,10 @@ from aiogram.utils.markdown import hbold
 from aiohttp import web
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 
-
+import config
 from create_bot import bot, router
 from data_base import sqlite_db
-from handlers import manage_hand, view_hand
-
-import config
+# from handlers import manage_hand, view_hand
 
 
 # Test handlers
@@ -44,11 +42,6 @@ async def echo_handler(message: Message) -> None:
         await message.answer("Nice try!")
 
 
-# async def on_startup(_):
-#     print("Bot online")
-#     sqlite_db.sql_start()
-
-
 async def on_startup(bot: Bot):
     print("Bot online")
     sqlite_db.sql_start()
@@ -64,29 +57,17 @@ async def on_shutdown(bot: Bot):
 
 
 def main(bot: Bot) -> None:
-    # Dispatcher is a root router
+
     dp = Dispatcher()
-    # ... and all other routers should be attached to Dispatcher
     dp.include_router(router)
 
-    # Register startup hook to initialize webhook
     dp.startup.register(on_startup)
 
-    # bot = Bot(token=config.TG_TOKEN_API, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
-
-    # Initialize Bot instance with default bot properties which will be passed to all API calls
-    # bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
-
-    # Create aiohttp.web.Application instance
     app = web.Application()
 
-    # Create an instance of request handler,
-    # aiogram has few implementations for different cases of usage
-    # In this example we use SimpleRequestHandler which is designed to handle simple cases
     webhook_requests_handler = SimpleRequestHandler(
         dispatcher=dp,
         bot=bot,
-        # secret_token=WEBHOOK_SECRET,
     )
     # Register webhook handler on application
     webhook_requests_handler.register(app, path=config.WEBHOOK_PATH)
@@ -101,22 +82,3 @@ def main(bot: Bot) -> None:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     main(bot)
-
-
-
-
-# if __name__ == "__main__":
-#     if config.START_UP == "polling":
-#         print(f"working with {config.START_UP}")
-#         executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
-#     else:
-#         print(f"working with {config.START_UP}")
-#         executor.start_webhook(
-#             dispatcher=dp,
-#             webhook_path="",
-#             on_startup=on_startup_webhook,
-#             on_shutdown=on_shutdown,
-#             skip_updates=True,
-#             host="0.0.0.0",
-#             port=int(os.environ.get("PORT", 5000))
-#         )
