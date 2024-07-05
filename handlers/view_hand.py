@@ -1,7 +1,8 @@
-from aiogram import types, Dispatcher
+from aiogram import types
+from aiogram.filters import Command
 
-from create_bot import dp
-from data_base.sqlite_db import sql_show_suggestions, sql_fetch_random
+from create_bot import router
+from data_base.sqlite_db import sql_fetch_random, sql_show_suggestions
 from keyboards.view_keyboard import kb_view
 
 
@@ -12,7 +13,7 @@ keywords "watched" or "active" in the message text displays a list of films that
 """
 
 
-@dp.message_handler(commands=['start', 'help'])
+@router.message(Command("start", "help"))
 async def send_welcome(message: types.Message):
     """
     This handler will be called when user sends `/start` or `/help` command
@@ -21,7 +22,7 @@ async def send_welcome(message: types.Message):
                         reply_markup=kb_view)
 
 
-@dp.message_handler(lambda message: message.text.startswith("watched") or message.text.startswith("active"))
+@router.message(lambda message: message.text.startswith("watched") or message.text.startswith("active"))
 async def show_films(message: types.Message):
     """
     Displays a list of films based on their status.
@@ -38,7 +39,7 @@ async def show_films(message: types.Message):
         await sql_show_suggestions(message, "active")
 
 
-@dp.message_handler(lambda message: message.text.startswith("random"))
+@router.message(lambda message: message.text.startswith("random"))
 async def random_films(message: types.Message):
     """
     Handle messages containing requests for random films.
@@ -58,7 +59,7 @@ async def random_films(message: types.Message):
     await sql_fetch_random(message, num_films)
 
 
-@dp.message_handler()
+@router.message()
 async def show_info(message: types.Message):
     """
     Provides information about available commands.
@@ -75,10 +76,3 @@ async def show_info(message: types.Message):
 
     # Provide a list of active commands
     await message.answer(f"Here is a list of active commands:\n {list_of_keywords}")
-
-
-def register_view_handlers(dp: Dispatcher):
-    dp.register_message_handler(send_welcome, commands=['start', 'help'])
-    dp.register_message_handler(show_films)
-    dp.register_message_handler(random_films)
-    dp.register_message_handler(show_info)

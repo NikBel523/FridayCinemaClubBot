@@ -1,6 +1,6 @@
-from aiogram import types, Dispatcher
+from aiogram import types
 
-from create_bot import dp
+from create_bot import router
 from data_base.sqlite_db import sql_add_film, sql_change_status, sql_delete_film
 
 
@@ -34,7 +34,7 @@ def content_extractor(message: str) -> tuple:
     return film_title, comment
 
 
-@dp.message_handler(lambda message: message.text.startswith("+++"))
+@router.message(lambda message: message.text.startswith("+++"))
 async def add_films(message: types.Message):
     """
     Adds several films to the database with the default status set to 'active'.
@@ -56,7 +56,7 @@ async def add_films(message: types.Message):
         await message.answer(result)
 
 
-@dp.message_handler(lambda message: message.text.startswith("+"))
+@router.message(lambda message: message.text.startswith("+"))
 async def add_film(message: types.Message):
     """
     Adds a film to the database with the default status set to 'active'.
@@ -76,7 +76,7 @@ async def add_film(message: types.Message):
     await message.answer(result)
 
 
-@dp.message_handler(lambda message: message.text.startswith("---") or message.text.startswith("—-"))
+@router.message(lambda message: message.text.startswith("---") or message.text.startswith("—-"))
 async def check_films(message: types.Message):
     """
     Changes the status of several films to "watched".
@@ -98,7 +98,7 @@ async def check_films(message: types.Message):
         await message.answer(result)
 
 
-@dp.message_handler(lambda message: message.text.startswith("-"))
+@router.message(lambda message: message.text.startswith("-"))
 async def check(message: types.Message):
     """
     Changes the status of a film to "watched".
@@ -117,7 +117,7 @@ async def check(message: types.Message):
     await message.answer(result)
 
 
-@dp.message_handler(lambda message: message.text.startswith("delete"))
+@router.message(lambda message: message.text.startswith("delete"))
 async def delete_films(message: types.Message):
     """
     Deletes a film from the database.
@@ -135,11 +135,3 @@ async def delete_films(message: types.Message):
     result = await sql_delete_film(film_name)
     # Delete the film from the database and notify the user about the successful deletion
     await message.answer(result)
-
-
-def register_manage_handlers(dp: Dispatcher):
-    dp.register_message_handler(add_films)
-    dp.register_message_handler(add_film)
-    dp.register_message_handler(check_films)
-    dp.register_message_handler(check)
-    dp.register_message_handler(delete_films)
