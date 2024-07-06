@@ -1,6 +1,5 @@
 import os
 
-START_UP = "polling"
 
 # webhook configurations
 WEB_SERVER_HOST = "127.0.0.1"
