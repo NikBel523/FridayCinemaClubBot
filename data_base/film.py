@@ -28,4 +28,3 @@ class Film(Base):
             self.date_out = datetime.date.today()
         else:
             return False
-
