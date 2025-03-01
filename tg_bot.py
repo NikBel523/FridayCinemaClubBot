@@ -1,4 +1,5 @@
 import logging
+import ssl
 import sys
 from aiogram import Bot, Dispatcher, Router
 from aiohttp import web
@@ -13,7 +14,7 @@ from handlers import manage_hand, view_hand
 async def on_startup(bot: Bot):
     print("Bot online")
     sqlite_db.sql_start()
-    await bot.set_webhook(f"{config.BASE_WEBHOOK_URL}{config.WEBHOOK_PATH}")
+    await bot.set_webhook(f"{config.BASE_WEBHOOK_URL}:{config.WEB_SERVER_PORT}{config.WEBHOOK_PATH}")
 
 
 async def on_shutdown(bot: Bot):
@@ -39,8 +40,14 @@ def main(bot: Bot, router: Router) -> None:
     # Mount dispatcher startup and shutdown hooks to aiohttp application
     setup_application(app, dp, bot=bot)
 
+    ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    ssl_context.load_cert_chain(
+        config.CERT_PATH,
+        config.CERT_KEY
+    )
+
     # And finally start webserver
-    web.run_app(app, host=config.WEB_SERVER_HOST, port=config.WEB_SERVER_PORT)
+    web.run_app(app, host=config.WEB_SERVER_HOST, port=config.WEB_SERVER_PORT, ssl_context=ssl_context)
 
 
 if __name__ == "__main__":
