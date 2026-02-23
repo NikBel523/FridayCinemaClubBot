@@ -9,6 +9,7 @@ from aiohttp import web
 import config
 from create_bot import bot, router
 from data_base import sqlite_db
+from handlers import view_hand, manage_hand
 
 logger = logging.getLogger(__name__)
 
